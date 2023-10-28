@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-ingress-vx
+  namespace: example
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: "192-168-2-201.nip.io"
+      http:
+        paths:
+          - path: "/v1"
+            pathType: Prefix
+            backend:
+              service:
+                name: my-service-v1
+                port:
+                  number: 80
+          - path: "/v2"
+            pathType: Exact
+            backend:
+              service:
+                name: my-service-v2
+                port:
+                  number: 80
+    - host: "v1.192-168-2-201.nip.io"
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: my-service-v1
+                port:
+                  number: 80
